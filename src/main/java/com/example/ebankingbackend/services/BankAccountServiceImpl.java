@@ -2,6 +2,7 @@ package com.example.ebankingbackend.services;
 
 
 import com.example.ebankingbackend.entities.*;
+import com.example.ebankingbackend.enums.AccountStatus;
 import com.example.ebankingbackend.enums.OperationType;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
@@ -49,6 +50,8 @@ public class BankAccountServiceImpl implements BankAccountService{
         currentBankAccount.setId(UUID.randomUUID().toString());
         currentBankAccount.setBalance(initialBalance);
         currentBankAccount.setCustomer(customer);
+        currentBankAccount.setCreatedAt(new Date());
+        currentBankAccount.setAccountStatus(Math.random()>0.? AccountStatus.CREATED:AccountStatus.ACTIVATED);
 
         return bankAcountRepository.save(currentBankAccount);
 
@@ -64,6 +67,8 @@ public class BankAccountServiceImpl implements BankAccountService{
         savingAcount.setId(UUID.randomUUID().toString());
         savingAcount.setBalance(initialBalance);
         savingAcount.setCustomer(customer);
+        savingAcount.setCreatedAt(new Date());
+        savingAcount.setAccountStatus(Math.random()>0.? AccountStatus.CREATED:AccountStatus.ACTIVATED);
 
         return bankAcountRepository.save(savingAcount);
     }

@@ -1,21 +1,23 @@
 package com.example.ebankingbackend;
 
 
-import com.example.ebankingbackend.entities.AccountOperation;
-import com.example.ebankingbackend.entities.CurrentAcount;
-import com.example.ebankingbackend.entities.Customer;
-import com.example.ebankingbackend.entities.SavingAcount;
+import com.example.ebankingbackend.entities.*;
 import com.example.ebankingbackend.enums.AccountStatus;
 import com.example.ebankingbackend.enums.OperationType;
+import com.example.ebankingbackend.exceptions.BankAccountNotFound;
+import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
+import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
 import com.example.ebankingbackend.repositories.AccountOperationRepository;
 import com.example.ebankingbackend.repositories.BankAcountRepository;
 import com.example.ebankingbackend.repositories.CustomerRepository;
+import com.example.ebankingbackend.services.BankAccountService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Stream;
 
@@ -28,6 +30,56 @@ public class EBankingBackendApplication {
 
     }
     @Bean
+    CommandLineRunner commandLineRunner(BankAccountService bankAccountService , BankAcountRepository bankAcountRepository){
+        return args -> {
+            //create Customers
+
+            Stream.of("hassan","mohamed","yassin")
+                    .forEach(name-> {
+                        Customer customer = new Customer();
+                        customer.setName(name);
+                        customer.setEmail(name+"@gmail.com");
+                        bankAccountService.saveCustomer(customer);
+                    });
+
+
+            //Create Account for these Customers
+            List<Customer> customers = bankAccountService.listCustomer();
+            customers.forEach(cus->{
+                try {
+                    bankAccountService.saveCurrentBankAccount(Math.random()*20000,4000,cus.getId());
+                    bankAccountService.saveSavingBankAccount(Math.random()*14000,4.5,cus.getId());
+                } catch (CustomerNotFoundExeption e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+
+            // Create Operations for these Accounts
+            List<BankAccount> allAccounts = bankAcountRepository.findAll();
+            allAccounts.forEach(bankAccount -> {
+                for (int i = 0; i <10 ; i++) {
+
+
+                try {
+                    bankAccountService.credit(Math.random()*140000,bankAccount.getId(),"versement");
+                } catch (BankAccountNotFound e) {
+                    throw new RuntimeException(e);
+                }
+                try {
+                    bankAccountService.debit(Math.random()*140,bankAccount.getId(),"retrait");
+                } catch (BankAccountNotFound | InsuffitientBalanceExeption exception) {
+                   exception.printStackTrace();
+                }
+
+                }
+
+            });
+
+
+        };
+    }
+   // @Bean
     CommandLineRunner start(AccountOperationRepository accountOperationRepository
     , CustomerRepository customerRepository, BankAcountRepository bankAcountRepository){
         return args -> {
