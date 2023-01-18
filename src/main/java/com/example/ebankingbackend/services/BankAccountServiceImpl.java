@@ -1,55 +1,50 @@
 package com.example.ebankingbackend.services;
 
-import com.example.ebankingbackend.dtos.CurrentAccountDTO;
-import com.example.ebankingbackend.dtos.CustomerDTO;
-import com.example.ebankingbackend.dtos.SavingAccountDTO;
+
+import com.example.ebankingbackend.entities.BankAccount;
+import com.example.ebankingbackend.entities.Customer;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Service
+@Transactional
+@AllArgsConstructor
 public class BankAccountServiceImpl implements BankAccountService{
     @Override
-    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
-        return null;
-
-    }
-
-    @Override
-    public List<CustomerDTO> listCustomer() {
+    public Customer saveCustomer(Customer customer) {
         return null;
     }
 
     @Override
-    public CurrentAccountDTO saveCurrentAccount() {
+    public List<Customer> listCustomer() {
         return null;
     }
 
     @Override
-    public SavingAccountDTO saveSavingAccount() {
+    public BankAccount saveBankAccount(double initialBalance, String type, Long customerId) {
         return null;
     }
 
     @Override
-    public CurrentAccountDTO getCurrentAccount() {
+    public BankAccount getBankAccount(String accountID) {
         return null;
     }
 
     @Override
-    public SavingAccountDTO getSavingAccount() {
-        return null;
-    }
-
-    @Override
-    public void debit() {
+    public void debit(double amount, String accountID, String description) {
 
     }
 
     @Override
-    public void credit() {
+    public void credit(double amount, String accountID, String description) {
 
     }
 
     @Override
-    public void transfert() {
+    public void transfert(double amount, String accountSourceID, String accountDestinationId) {
 
     }
 }

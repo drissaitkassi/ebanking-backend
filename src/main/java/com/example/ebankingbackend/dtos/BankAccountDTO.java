@@ -3,5 +3,7 @@ package com.example.ebankingbackend.dtos;
 import lombok.Data;
 
 @Data
-public class AccountOperationDTO {
+public class BankAccountDTO {
+
+
 }
