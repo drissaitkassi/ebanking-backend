@@ -19,4 +19,12 @@ public class BankServiceMapper {
         return customerDTO;
 
     }
+
+    public Customer fromCustomerDTO(CustomerDTO customerDTO){
+
+        Customer customer = new Customer();
+        BeanUtils.copyProperties(customerDTO,customer);
+        return customer;
+
+    }
 }

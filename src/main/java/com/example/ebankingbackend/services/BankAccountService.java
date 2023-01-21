@@ -14,8 +14,15 @@ import java.util.Optional;
 
 public interface BankAccountService {
     // Customers
-    Customer saveCustomer(Customer customer);
+    CustomerDTO saveCustomer(CustomerDTO customer);
+
+    //updatecustomer take in a customerDTO  saves a customer to the entity  and return customer DTO
+    CustomerDTO updateCustomer(CustomerDTO customer);
+
+    void deleteCustomer(Long customerId);
+
     List<CustomerDTO> listCustomer();
+    CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundExeption;
     // Bank accounts
 
     CurrentAcount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption;
@@ -30,7 +37,6 @@ public interface BankAccountService {
     void debit(double amount,String accountID,String description) throws BankAccountNotFound, InsuffitientBalanceExeption;
     void credit(double amount,String accountID,String description) throws BankAccountNotFound;
     void transfert(double amount,String accountSourceID,String accountDestinationId) throws InsuffitientBalanceExeption, BankAccountNotFound;
-
 
 
 

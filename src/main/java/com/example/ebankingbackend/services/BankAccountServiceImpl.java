@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -31,8 +30,27 @@ public class BankAccountServiceImpl implements BankAccountService{
     private CustomerRepository customerRepository;
     private BankServiceMapper bankServiceMapper;
     @Override
-    public Customer saveCustomer(Customer customer) {
-        return customerRepository.save(customer);
+    public CustomerDTO saveCustomer(CustomerDTO customer) {
+
+        Customer customer1 = bankServiceMapper.fromCustomerDTO(customer);
+        Customer savedCustomer =customerRepository.save(customer1);
+        return bankServiceMapper.fromCustomer(savedCustomer);
+
+    }
+
+    //updatecustomer take in a customerDTO  saves a customer to the entity  and return customer DTO
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customer) {
+        Customer customer1 = bankServiceMapper.fromCustomerDTO(customer);
+        Customer savedCustomer =customerRepository.save(customer1);
+        return bankServiceMapper.fromCustomer(savedCustomer);
+
+    }
+
+    @Override
+    public void deleteCustomer(Long customerId){
+        customerRepository.deleteById(customerId);
+
     }
 
     @Override
@@ -43,7 +61,12 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
 
+    @Override
+    public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundExeption {
 
+        Customer customer = customerRepository.findById(customerId).orElseThrow(()->new CustomerNotFoundExeption("customer not found"));
+        return bankServiceMapper.fromCustomer(customer);
+    }
 
 
     @Override

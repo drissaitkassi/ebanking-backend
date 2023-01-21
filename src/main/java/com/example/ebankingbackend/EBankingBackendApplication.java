@@ -37,7 +37,7 @@ public class EBankingBackendApplication {
 
             Stream.of("hassan","mohamed","yassin")
                     .forEach(name-> {
-                        Customer customer = new Customer();
+                        CustomerDTO customer = new CustomerDTO();
                         customer.setName(name);
                         customer.setEmail(name+"@gmail.com");
                         bankAccountService.saveCustomer(customer);
