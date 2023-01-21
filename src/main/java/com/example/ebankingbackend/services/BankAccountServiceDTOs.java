@@ -14,9 +14,7 @@ public interface BankAccountServiceDTOs {
 
     BankAccountDTO getBankAccount(String accountID);
 
-
     // Account Operation
-
     void debit(double amount,String accountID,String description);
     void credit(double amount,String accountID,String description);
     void transfert(double amount,String accountSourceID,String accountDestinationId);

@@ -1,6 +1,7 @@
 package com.example.ebankingbackend;
 
 
+import com.example.ebankingbackend.dtos.CustomerDTO;
 import com.example.ebankingbackend.entities.*;
 import com.example.ebankingbackend.enums.AccountStatus;
 import com.example.ebankingbackend.enums.OperationType;
@@ -29,7 +30,7 @@ public class EBankingBackendApplication {
 
 
     }
-    @Bean
+    //@Bean
     CommandLineRunner commandLineRunner(BankAccountService bankAccountService , BankAcountRepository bankAcountRepository){
         return args -> {
             //create Customers
@@ -44,7 +45,7 @@ public class EBankingBackendApplication {
 
 
             //Create Account for these Customers
-            List<Customer> customers = bankAccountService.listCustomer();
+            List<CustomerDTO> customers = bankAccountService.listCustomer();
             customers.forEach(cus->{
                 try {
                     bankAccountService.saveCurrentBankAccount(Math.random()*20000,4000,cus.getId());

@@ -1,12 +1,14 @@
 package com.example.ebankingbackend.services;
 
 
+import com.example.ebankingbackend.dtos.CustomerDTO;
 import com.example.ebankingbackend.entities.*;
 import com.example.ebankingbackend.enums.AccountStatus;
 import com.example.ebankingbackend.enums.OperationType;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
 import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
+import com.example.ebankingbackend.mappers.BankServiceMapper;
 import com.example.ebankingbackend.repositories.AccountOperationRepository;
 import com.example.ebankingbackend.repositories.BankAcountRepository;
 import com.example.ebankingbackend.repositories.CustomerRepository;
@@ -27,14 +29,17 @@ public class BankAccountServiceImpl implements BankAccountService{
     private AccountOperationRepository accountOperationRepository;
     private BankAcountRepository bankAcountRepository;
     private CustomerRepository customerRepository;
+    private BankServiceMapper bankServiceMapper;
     @Override
     public Customer saveCustomer(Customer customer) {
         return customerRepository.save(customer);
     }
 
     @Override
-    public List<Customer> listCustomer() {
-        return customerRepository.findAll();
+    public List<CustomerDTO> listCustomer() {
+        List<Customer> customerList= customerRepository.findAll();
+        return customerList.stream().map(customer -> bankServiceMapper.fromCustomer(customer)).toList();
+
     }
 
 

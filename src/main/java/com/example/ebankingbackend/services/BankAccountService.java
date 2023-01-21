@@ -1,5 +1,6 @@
 package com.example.ebankingbackend.services;
 
+import com.example.ebankingbackend.dtos.CustomerDTO;
 import com.example.ebankingbackend.entities.BankAccount;
 import com.example.ebankingbackend.entities.CurrentAcount;
 import com.example.ebankingbackend.entities.Customer;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public interface BankAccountService {
     // Customers
     Customer saveCustomer(Customer customer);
-    List<Customer> listCustomer();
+    List<CustomerDTO> listCustomer();
     // Bank accounts
 
     CurrentAcount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption;
