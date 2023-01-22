@@ -1,7 +1,7 @@
 package com.example.ebankingbackend.services;
 
 
-import com.example.ebankingbackend.dtos.CustomerDTO;
+import com.example.ebankingbackend.dtos.*;
 import com.example.ebankingbackend.entities.*;
 import com.example.ebankingbackend.enums.AccountStatus;
 import com.example.ebankingbackend.enums.OperationType;
@@ -29,6 +29,8 @@ public class BankAccountServiceImpl implements BankAccountService{
     private BankAcountRepository bankAcountRepository;
     private CustomerRepository customerRepository;
     private BankServiceMapper bankServiceMapper;
+
+    //Customers
     @Override
     public CustomerDTO saveCustomer(CustomerDTO customer) {
 
@@ -38,7 +40,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     }
 
-    //updatecustomer take in a customerDTO  saves a customer to the entity  and return customer DTO
+    //updateCustomer take in a customerDTO  saves a customer to the entity  and return customer DTO
     @Override
     public CustomerDTO updateCustomer(CustomerDTO customer) {
         Customer customer1 = bankServiceMapper.fromCustomerDTO(customer);
@@ -60,7 +62,6 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     }
 
-
     @Override
     public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundExeption {
 
@@ -69,7 +70,9 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
 
-    @Override
+    // BankAccount
+
+  /*  @Override
     public CurrentAcount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption {
         Customer customer=customerRepository.findById(customerId).orElse(null);
         if (customer==null)throw new CustomerNotFoundExeption("customer not found ");
@@ -85,9 +88,32 @@ public class BankAccountServiceImpl implements BankAccountService{
 
 
     }
+*/
 
     @Override
-    public SavingAcount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundExeption {
+    public CurrentAcountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption {
+
+        // even though it returns CurrentAccountDTO, but it takes in normal CurrentAccount from the parameter
+        // that's why we still need a normal Customer Object  that we can use on the normal CurrentAccount object
+        Customer customer=customerRepository.findById(customerId).orElse(null);
+        if (customer==null)throw new CustomerNotFoundExeption("customer not found ");
+        CurrentAcount currentBankAccount=new CurrentAcount();
+        currentBankAccount.setOverDraft(overDraft);
+        currentBankAccount.setId(UUID.randomUUID().toString());
+        currentBankAccount.setBalance(initialBalance);
+        currentBankAccount.setCustomer(customer);
+        currentBankAccount.setCreatedAt(new Date());
+        currentBankAccount.setAccountStatus(Math.random()>0.? AccountStatus.CREATED:AccountStatus.ACTIVATED);
+        CurrentAcount savedCurrentAccount = bankAcountRepository.save(currentBankAccount);
+        //after saving the normal  CurrentAccount object ,then we can return the  CurrentAccountDTO object using the mapper
+        //****************** but we still need to map the normal Customer Object to CustomerDTO Object  inside the CurrentAccount Mapper itself **********************
+        return bankServiceMapper.fromCurrentBankAccount(savedCurrentAccount);
+
+
+    }
+
+    @Override
+    public SavingAcountDTO saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundExeption {
         Customer customer=customerRepository.findById(customerId).orElse(null);
         if (customer==null)throw new CustomerNotFoundExeption("customer not found ");
         SavingAcount savingAcount=new SavingAcount();
@@ -98,34 +124,40 @@ public class BankAccountServiceImpl implements BankAccountService{
         savingAcount.setCreatedAt(new Date());
         savingAcount.setAccountStatus(Math.random()>0.? AccountStatus.CREATED:AccountStatus.ACTIVATED);
 
-        return bankAcountRepository.save(savingAcount);
+        SavingAcount savedSavingAccount = bankAcountRepository.save(savingAcount);
+        return bankServiceMapper.fromSavingBankAccount(savedSavingAccount);
     }
-
 
     @Override
-    public BankAccount getBankAccount(String accountID) throws BankAccountNotFound{
+    public BankAccountDTO getBankAccount(String accountID) throws BankAccountNotFound{
         BankAccount bankAccount= bankAcountRepository.findById(accountID).orElse(null);
         if (bankAccount==null)throw new BankAccountNotFound("BankAccount Not Found");
+       return bankServiceMapper.fromBankAccount(bankAccount);
 
-        return bankAccount;
 
     }
+
+    // AccountOperations
 
     @Override
     public void debit(double amount, String accountID, String description) throws BankAccountNotFound, InsuffitientBalanceExeption {
-        BankAccount bankAccount = getBankAccount(accountID);
+        BankAccountDTO bankAccount = getBankAccount(accountID);
 
         if(amount >bankAccount.getBalance())throw new InsuffitientBalanceExeption("Inssuffitient Funds you Asshole") ;
-        AccountOperation accountOperation=new AccountOperation();
+        AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
 
-        accountOperation.setBankAccount(bankAccount);
-        accountOperation.setOperationDate(new Date());
-        accountOperation.setOperationType(OperationType.DEBIT);
-        accountOperation.setAmount(amount);
-        accountOperation.setDescription("retrait");
+        accountOperationDTO.setBankAccountDTO(bankAccount);
+        accountOperationDTO.setOperationDate(new Date());
+        accountOperationDTO.setOperationType(OperationType.DEBIT);
+        accountOperationDTO.setAmount(amount);
+        accountOperationDTO.setDescription("retrait");
         bankAccount.setBalance(bankAccount.getBalance()-amount);
-        accountOperationRepository.save(accountOperation);
-        bankAcountRepository.save(bankAccount);
+       //map to AccountOperation to save on repository
+        AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
+        accountOperationRepository.save(accountOperationToBeSaved);
+        //map to bank account to save on repository
+        BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
+        bankAcountRepository.save(bankAccountToBeSaved);
 
 
 
@@ -134,36 +166,53 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public void credit(double amount, String accountID, String description) throws BankAccountNotFound {
-        BankAccount bankAccount = getBankAccount(accountID);
+        BankAccountDTO bankAccount = getBankAccount(accountID);
 
-        AccountOperation accountOperation=new AccountOperation();
+        AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
 
-        accountOperation.setBankAccount(bankAccount);
-        accountOperation.setOperationDate(new Date());
-        accountOperation.setOperationType(OperationType.CREDIT);
-        accountOperation.setAmount(amount);
-        accountOperation.setDescription("versement");
+        accountOperationDTO.setBankAccountDTO(bankAccount);
+        accountOperationDTO.setOperationDate(new Date());
+        accountOperationDTO.setOperationType(OperationType.CREDIT);
+        accountOperationDTO.setAmount(amount);
+        accountOperationDTO.setDescription("versement");
         bankAccount.setBalance(bankAccount.getBalance()+amount);
-        //todo
+        //map to AccountOperation to save on repository
+        AccountOperation accountOperationToBeSaved = bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
         //save the operation
-        accountOperationRepository.save(accountOperation);
-        //todo
+        accountOperationRepository.save(accountOperationToBeSaved);
+        ///map to bank account to save on repository
+        BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
         //save the bank account to reflect the changes on the database
-        bankAcountRepository.save(bankAccount);
+        bankAcountRepository.save(bankAccountToBeSaved);
 
     }
 
     @Override
     public void transfert(double amount, String accountSourceID, String accountDestinationId) throws InsuffitientBalanceExeption, BankAccountNotFound {
-        BankAccount bankAccountSource = getBankAccount(accountSourceID);
-        if(amount >bankAccountSource.getBalance())throw new InsuffitientBalanceExeption("Inssuffitient Funds you Asshole") ;
-        AccountOperation accountOperation=new AccountOperation();
+        BankAccountDTO bankAccountSourceDTO = getBankAccount(accountSourceID);
+        AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
         debit(amount,accountSourceID,"transfert from");
         credit(amount,accountDestinationId,"transfert to");
 
+        //map to AccountOperation to save on repository
+        AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
+        accountOperationRepository.save(accountOperationToBeSaved);
 
-        accountOperationRepository.save(accountOperation);
 
+    }
 
+    @Override
+    public List<BankAccountDTO> getBankAccounts(){
+        List<BankAccount> bankAccountList =bankAcountRepository.findAll();
+        List<BankAccountDTO> bankAccountsDTOs = bankAccountList.stream().map(bankAccount -> {
+            if (bankAccount instanceof SavingAcount){
+                SavingAcount savingAcount =(SavingAcount) bankAccount;
+              return   bankServiceMapper.fromSavingBankAccount(savingAcount);
+            }else{
+                CurrentAcount currentAcount=(CurrentAcount) bankAccount;
+                return bankServiceMapper.fromCurrentBankAccount(currentAcount);
+            }
+        }).toList();
+        return bankAccountsDTOs;
     }
 }

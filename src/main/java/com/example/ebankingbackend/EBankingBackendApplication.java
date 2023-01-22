@@ -1,6 +1,7 @@
 package com.example.ebankingbackend;
 
 
+import com.example.ebankingbackend.dtos.BankAccountDTO;
 import com.example.ebankingbackend.dtos.CustomerDTO;
 import com.example.ebankingbackend.entities.*;
 import com.example.ebankingbackend.enums.AccountStatus;

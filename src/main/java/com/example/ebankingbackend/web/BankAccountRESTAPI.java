@@ -1,11 +1,13 @@
 package com.example.ebankingbackend.web;
 
-import com.example.ebankingbackend.dtos.CustomerDTO;
-import com.example.ebankingbackend.entities.Customer;
-import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
+
+import com.example.ebankingbackend.dtos.BankAccountDTO;
+import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.services.BankAccountService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
@@ -13,34 +15,19 @@ import java.util.List;
 @AllArgsConstructor
 public class BankAccountRESTAPI {
 
-    BankAccountService bankAccountService;
+    private BankAccountService bankAccountService;
 
-    @GetMapping(path = "/customers")
-    public List<CustomerDTO> customers(){
-        return bankAccountService.listCustomer();
+    @GetMapping(path = "/api/v1/bank")
+    public List<BankAccountDTO>getBank(){
+        return bankAccountService.getBankAccounts();
+
     }
 
-    @GetMapping(path = "/customers/{id}")
-    public CustomerDTO customer(@PathVariable(name = "id") Long customerId) throws CustomerNotFoundExeption {
-        return bankAccountService.getCustomer(customerId);
+    @GetMapping(path = "/api/v1/bank/{id}")
+    public BankAccountDTO getBankAcount(@PathVariable(name = "id") String accId) throws BankAccountNotFound {
+        return bankAccountService.getBankAccount(accId);
+
     }
 
 
-    @PostMapping(path = "/customers")
-    public CustomerDTO saveCus(@RequestBody CustomerDTO customerDTO){
-        return bankAccountService.saveCustomer(customerDTO);
-    }
-
-    @PutMapping(path = "/customers/{id}")
-    public CustomerDTO updatecus(@PathVariable(name = "id")Long customerId ,@RequestBody CustomerDTO customerDTO){
-        //set the id of that customerDTO that we got from client to the value of the path variable
-        customerDTO.setId(customerId);
-        // call update methode from the service which does the same thins as save
-        return bankAccountService.updateCustomer(customerDTO);
-    }
-
-    @DeleteMapping(path = "/customers/{id}")
-    public void deleteCus(@PathVariable(name = "id") Long customerId){
-         bankAccountService.deleteCustomer(customerId);
-    }
 }

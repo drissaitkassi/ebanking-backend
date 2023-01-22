@@ -33,6 +33,7 @@ public class BankServiceMapper {
 
         BankAccountDTO bankAccountDTO = new BankAccountDTO();
         BeanUtils.copyProperties(bankAccount,bankAccountDTO);
+        bankAccountDTO.setCustomerDTO(fromCustomer(bankAccount.getCustomer()));
         return bankAccountDTO;
 
     }
@@ -41,6 +42,7 @@ public class BankServiceMapper {
 
         BankAccount bankAccount = new BankAccount();
         BeanUtils.copyProperties(bankAccountDTO,bankAccount);
+        bankAccount.setCustomer(fromCustomerDTO(bankAccountDTO.getCustomerDTO()));
         return bankAccount;
 
     }
@@ -50,6 +52,7 @@ public class BankServiceMapper {
 
      SavingAcountDTO savingAcountDTO = new SavingAcountDTO();
         BeanUtils.copyProperties(savingAcount,savingAcountDTO);
+        savingAcountDTO.setCustomerDTO(fromCustomer(savingAcount.getCustomer()));
         return savingAcountDTO;
 
     }
@@ -58,6 +61,7 @@ public class BankServiceMapper {
 
         SavingAcount savingAcount = new SavingAcount();
         BeanUtils.copyProperties(savingAcountDTO,savingAcount);
+        savingAcount.setCustomer(fromCustomerDTO(savingAcountDTO.getCustomerDTO()));
         return savingAcount;
 
     }
@@ -67,6 +71,7 @@ public class BankServiceMapper {
 
         CurrentAcountDTO currentAcountDTO = new CurrentAcountDTO();
         BeanUtils.copyProperties(currentAcount,currentAcountDTO);
+        currentAcountDTO.setCustomerDTO(fromCustomer(currentAcount.getCustomer()));
         return currentAcountDTO;
 
     }
@@ -75,6 +80,7 @@ public class BankServiceMapper {
 
         CurrentAcount currentAcount = new CurrentAcount();
         BeanUtils.copyProperties(currentAcountDTO,currentAcount);
+        currentAcount.setCustomer(fromCustomerDTO(currentAcountDTO.getCustomerDTO()));
         return currentAcount;
 
     }
@@ -83,6 +89,7 @@ public class BankServiceMapper {
 
         AccountOperationDTO accountOperationDTO = new AccountOperationDTO();
         BeanUtils.copyProperties(accountOperation,accountOperationDTO);
+        accountOperationDTO.setBankAccountDTO(fromBankAccount(accountOperation.getBankAccount()));
         return accountOperationDTO;
 
     }
@@ -91,11 +98,10 @@ public class BankServiceMapper {
 
         AccountOperation accountOperation = new AccountOperation();
         BeanUtils.copyProperties(accountOperationDTO,accountOperation);
+        accountOperation.setBankAccount(fromBankAccountDTO(accountOperationDTO.getBankAccountDTO()));
         return accountOperation;
 
     }
-
-
 
 
 

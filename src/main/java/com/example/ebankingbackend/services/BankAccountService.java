@@ -1,16 +1,14 @@
 package com.example.ebankingbackend.services;
 
+import com.example.ebankingbackend.dtos.BankAccountDTO;
+import com.example.ebankingbackend.dtos.CurrentAcountDTO;
 import com.example.ebankingbackend.dtos.CustomerDTO;
-import com.example.ebankingbackend.entities.BankAccount;
-import com.example.ebankingbackend.entities.CurrentAcount;
-import com.example.ebankingbackend.entities.Customer;
-import com.example.ebankingbackend.entities.SavingAcount;
+import com.example.ebankingbackend.dtos.SavingAcountDTO;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
 import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface BankAccountService {
     // Customers
@@ -25,11 +23,11 @@ public interface BankAccountService {
     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundExeption;
     // Bank accounts
 
-    CurrentAcount saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption;
+    CurrentAcountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption;
 
-    SavingAcount saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundExeption;
+    SavingAcountDTO saveSavingBankAccount(double initialBalance, double interestRate, Long customerId) throws CustomerNotFoundExeption;
 
-    BankAccount getBankAccount(String accountID) throws BankAccountNotFound;
+    BankAccountDTO getBankAccount(String accountID) throws BankAccountNotFound;
 
 
     // Account Operation
@@ -39,5 +37,5 @@ public interface BankAccountService {
     void transfert(double amount,String accountSourceID,String accountDestinationId) throws InsuffitientBalanceExeption, BankAccountNotFound;
 
 
-
+    List<BankAccountDTO> getBankAccounts();
 }

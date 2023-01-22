@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-public class SavingAcountDTO extends BankAccount {
+public class SavingAcountDTO extends BankAccountDTO {
     private double interestRate;
+    private CustomerDTO customerDTO;
 }
