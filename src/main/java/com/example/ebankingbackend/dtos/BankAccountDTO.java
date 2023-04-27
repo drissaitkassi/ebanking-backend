@@ -10,6 +10,7 @@ public class BankAccountDTO {
 
 
     private String id;
+    private String accountType;
     private double balance;
     private Date createdAt;
     private AccountStatus accountStatus;

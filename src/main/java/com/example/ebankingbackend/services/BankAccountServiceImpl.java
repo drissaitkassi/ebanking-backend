@@ -215,4 +215,15 @@ public class BankAccountServiceImpl implements BankAccountService{
         }).toList();
         return bankAccountsDTOs;
     }
+
+    @Override
+    public List<AccountOperationDTO> getAccountOperationsHistory(String accountId){
+        // get operations based on account id
+        List<AccountOperation> accountOperation=accountOperationRepository.findByBankAccountId(accountId);
+        //map operation to dto
+        List<AccountOperationDTO> accountOperationDTOS = accountOperation.stream().map(ops -> bankServiceMapper.fromAccountOperation(ops)).toList();
+        //return results
+        return accountOperationDTOS;
+
+    }
 }

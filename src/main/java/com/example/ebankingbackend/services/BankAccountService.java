@@ -1,9 +1,6 @@
 package com.example.ebankingbackend.services;
 
-import com.example.ebankingbackend.dtos.BankAccountDTO;
-import com.example.ebankingbackend.dtos.CurrentAcountDTO;
-import com.example.ebankingbackend.dtos.CustomerDTO;
-import com.example.ebankingbackend.dtos.SavingAcountDTO;
+import com.example.ebankingbackend.dtos.*;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
 import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
@@ -38,4 +35,7 @@ public interface BankAccountService {
 
 
     List<BankAccountDTO> getBankAccounts();
+
+
+    List<AccountOperationDTO> getAccountOperationsHistory(String accountId);
 }
