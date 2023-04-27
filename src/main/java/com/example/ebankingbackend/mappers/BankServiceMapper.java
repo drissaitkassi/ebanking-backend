@@ -91,7 +91,7 @@ public class BankServiceMapper {
 
         AccountOperationDTO accountOperationDTO = new AccountOperationDTO();
         BeanUtils.copyProperties(accountOperation,accountOperationDTO);
-        accountOperationDTO.setBankAccountDTO(fromBankAccount(accountOperation.getBankAccount()));
+       // accountOperationDTO.setBankAccountDTO(fromBankAccount(accountOperation.getBankAccount()));
         return accountOperationDTO;
 
     }
@@ -100,10 +100,21 @@ public class BankServiceMapper {
 
         AccountOperation accountOperation = new AccountOperation();
         BeanUtils.copyProperties(accountOperationDTO,accountOperation);
-        accountOperation.setBankAccount(fromBankAccountDTO(accountOperationDTO.getBankAccountDTO()));
+       //accountOperation.setBankAccount(fromBankAccountDTO(accountOperationDTO.getBankAccountDTO()));
         return accountOperation;
 
     }
 
+    public AccountHistoryDTO fromAccountHistoryOperations(List<AccountOperationDTO> accountOperationDTO,BankAccountDTO bankAccountDTO){
 
+
+        AccountHistoryDTO accountHistoryDTO=new AccountHistoryDTO();
+        accountHistoryDTO.setAccId(bankAccountDTO.getId());
+        accountHistoryDTO.setAccountType(bankAccountDTO.getAccountType());
+        accountHistoryDTO.setBalance(bankAccountDTO.getBalance());
+        accountHistoryDTO.setAccountOperationDTOList(accountOperationDTO);
+
+        return accountHistoryDTO;
+
+    }
 }

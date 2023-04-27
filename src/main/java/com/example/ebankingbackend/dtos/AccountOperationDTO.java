@@ -13,6 +13,5 @@ public class AccountOperationDTO {
     private Date operationDate;
     private double amount;
     private OperationType operationType;
-    private BankAccountDTO bankAccountDTO;
     private String description;
 }

@@ -38,4 +38,6 @@ public interface BankAccountService {
 
 
     List<AccountOperationDTO> getAccountOperationsHistory(String accountId);
+
+    AccountHistoryDTO getAccountHistory(String accountId, BankAccountDTO bankAccountDTO);
 }

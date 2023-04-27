@@ -1,14 +1,12 @@
 package com.example.ebankingbackend.web;
 
 
-import com.example.ebankingbackend.dtos.AccountOperationDTO;
-import com.example.ebankingbackend.dtos.BankAccountDTO;
+import com.example.ebankingbackend.dtos.*;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
+import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
 import com.example.ebankingbackend.services.BankAccountService;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,9 +29,19 @@ public class BankAccountRESTAPI {
     }
 
     @GetMapping(path = "/api/v1/bank/operations/{accountId}")
-    public List<AccountOperationDTO> getAccountOperationsHistory(@PathVariable(name = "accountId") String accId){
-        return bankAccountService.getAccountOperationsHistory(accId);
+    public AccountHistoryDTO getAccountOperationsHistory(@PathVariable(name = "accountId") String accId) throws BankAccountNotFound {
+        BankAccountDTO bk= bankAccountService.getBankAccount(accId);
+        return bankAccountService.getAccountHistory(accId,bk);
     }
 
+    @PostMapping(path ="/api/v1/bank/accounts/saving" )
+    public SavingAcountDTO saveSavingAccount(@RequestBody SavingAcountDTO savingAcountDTO) throws CustomerNotFoundExeption {
+        return bankAccountService.saveSavingBankAccount(savingAcountDTO.getBalance(),savingAcountDTO.getInterestRate(),savingAcountDTO.getCustomerDTO().getId());
+    }
+    /*@PostMapping(path ="/api/v1/bank/accounts/current" )
+
+    public CurrentAcountDTO saveCurrentAccount(){
+
+    }*/
 
 }

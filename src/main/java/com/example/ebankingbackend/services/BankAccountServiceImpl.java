@@ -146,7 +146,7 @@ public class BankAccountServiceImpl implements BankAccountService{
         if(amount >bankAccount.getBalance())throw new InsuffitientBalanceExeption("Inssuffitient Funds you Asshole") ;
         AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
 
-        accountOperationDTO.setBankAccountDTO(bankAccount);
+        //accountOperationDTO.setBankAccountDTO(bankAccount);
         accountOperationDTO.setOperationDate(new Date());
         accountOperationDTO.setOperationType(OperationType.DEBIT);
         accountOperationDTO.setAmount(amount);
@@ -170,7 +170,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 
         AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
 
-        accountOperationDTO.setBankAccountDTO(bankAccount);
+        //accountOperationDTO.setBankAccountDTO(bankAccount);
         accountOperationDTO.setOperationDate(new Date());
         accountOperationDTO.setOperationType(OperationType.CREDIT);
         accountOperationDTO.setAmount(amount);
@@ -224,6 +224,13 @@ public class BankAccountServiceImpl implements BankAccountService{
         List<AccountOperationDTO> accountOperationDTOS = accountOperation.stream().map(ops -> bankServiceMapper.fromAccountOperation(ops)).toList();
         //return results
         return accountOperationDTOS;
+
+    }
+
+    @Override
+    public AccountHistoryDTO getAccountHistory(String accountId,BankAccountDTO bankAccountDTO){
+
+      return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId),bankAccountDTO);
 
     }
 }
