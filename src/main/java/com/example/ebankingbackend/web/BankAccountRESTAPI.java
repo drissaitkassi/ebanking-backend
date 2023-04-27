@@ -38,10 +38,10 @@ public class BankAccountRESTAPI {
     public SavingAcountDTO saveSavingAccount(@RequestBody SavingAcountDTO savingAcountDTO) throws CustomerNotFoundExeption {
         return bankAccountService.saveSavingBankAccount(savingAcountDTO.getBalance(),savingAcountDTO.getInterestRate(),savingAcountDTO.getCustomerDTO().getId());
     }
-    /*@PostMapping(path ="/api/v1/bank/accounts/current" )
+    @PostMapping(path ="/api/v1/bank/accounts/current" )
+    public CurrentAcountDTO saveCurrentAccount(@RequestBody CurrentAcountDTO currentAcountDTO) throws CustomerNotFoundExeption {
+        return bankAccountService.saveCurrentBankAccount(currentAcountDTO.getBalance(),currentAcountDTO.getOverDraft(),currentAcountDTO.getCustomerDTO().getId());
 
-    public CurrentAcountDTO saveCurrentAccount(){
-
-    }*/
+    }
 
 }
