@@ -246,7 +246,7 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public AccountHistoryDTO getAccountHistory(String accountId, int page, int size, BankAccountDTO bankAccountDTO){
-      return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId,page,size ),bankAccountDTO);
+      return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId,page,size ),bankAccountDTO,page,size);
 
     }
 }

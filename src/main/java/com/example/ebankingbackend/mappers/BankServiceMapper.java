@@ -105,14 +105,16 @@ public class BankServiceMapper {
 
     }
 
-    public AccountHistoryDTO fromAccountHistoryOperations(List<AccountOperationDTO> accountOperationDTO,BankAccountDTO bankAccountDTO){
+    public AccountHistoryDTO fromAccountHistoryOperations(List<AccountOperationDTO> accountOperationDTO,BankAccountDTO bankAccountDTO ,int page,int size){
 
 
         AccountHistoryDTO accountHistoryDTO=new AccountHistoryDTO();
         accountHistoryDTO.setAccId(bankAccountDTO.getId());
-        accountHistoryDTO.setAccountType(bankAccountDTO.getAccountType());
+        accountHistoryDTO.setAccountType(bankAccountDTO.getClass().getSimpleName());
         accountHistoryDTO.setBalance(bankAccountDTO.getBalance());
         accountHistoryDTO.setAccountOperationDTOList(accountOperationDTO);
+        accountHistoryDTO.setCurrentPage(page);
+        accountHistoryDTO.setSize(size);
 
         return accountHistoryDTO;
 
