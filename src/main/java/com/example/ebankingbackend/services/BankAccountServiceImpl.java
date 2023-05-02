@@ -200,14 +200,14 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public void transfert(double amount, String accountSourceID, String accountDestinationId) throws InsuffitientBalanceExeption, BankAccountNotFound {
-        BankAccountDTO bankAccountSourceDTO = getBankAccount(accountSourceID);
-        AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
+        //BankAccountDTO bankAccountSourceDTO = getBankAccount(accountSourceID);
+        //AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
         debit(amount,accountSourceID,"transfert from");
         credit(amount,accountDestinationId,"transfert to");
 
         //map to AccountOperation to save on repository
-        AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
-        accountOperationRepository.save(accountOperationToBeSaved);
+        //AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
+        //accountOperationRepository.save(accountOperationToBeSaved);
 
     }
 

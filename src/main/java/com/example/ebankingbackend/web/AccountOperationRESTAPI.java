@@ -5,6 +5,7 @@ import com.example.ebankingbackend.dtos.AccountOperationDTO;
 //import com.example.ebankingbackend.dtos.CreditOperationDTO;
 import com.example.ebankingbackend.dtos.CreditOperationDTO;
 import com.example.ebankingbackend.dtos.DebitOperationDTO;
+import com.example.ebankingbackend.dtos.TransfertOperationDTO;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
 import com.example.ebankingbackend.services.BankAccountService;
@@ -36,5 +37,11 @@ public class AccountOperationRESTAPI {
         System.out.println( debitOperationDTO.getAccountId());
         System.out.println("===============================");
         bankAccountService.debit(debitOperationDTO.getAmount(), debitOperationDTO.getAccountId(), debitOperationDTO.getDescription());
+    }
+
+    @PostMapping(path = "/api/v1/operations/transfert")
+    public void setTransfer(@RequestBody TransfertOperationDTO transfertOperationDTO) throws InsuffitientBalanceExeption, BankAccountNotFound {
+        bankAccountService.transfert(transfertOperationDTO.getAmount(), transfertOperationDTO.getAccountId(), transfertOperationDTO.getDestinationAccountId());
+
     }
 }
