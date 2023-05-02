@@ -13,6 +13,8 @@ import com.example.ebankingbackend.repositories.AccountOperationRepository;
 import com.example.ebankingbackend.repositories.BankAcountRepository;
 import com.example.ebankingbackend.repositories.CustomerRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -227,9 +229,9 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public List<AccountOperationDTO> getAccountOperationsHistory(String accountId){
+    public List<AccountOperationDTO> getAccountOperationsHistory(String accountId, int page, int size){
         // get operations based on account id
-        List<AccountOperation> accountOperation=accountOperationRepository.findByBankAccountId(accountId);
+        Page<AccountOperation> accountOperation=accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page,size));
         //map operation to dto
         List<AccountOperationDTO> accountOperationDTOS = accountOperation.stream().map(ops -> bankServiceMapper.fromAccountOperation(ops)).toList();
         //return results
@@ -238,8 +240,13 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public AccountHistoryDTO getAccountHistory(String accountId, BankAccountDTO bankAccountDTO){
-      return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId),bankAccountDTO);
+    public AccountHistoryDTO getAccountHistory(String accountId, BankAccountDTO bankAccountDTO) {
+        return null;
+    }
+
+    @Override
+    public AccountHistoryDTO getAccountHistory(String accountId, int page, int size, BankAccountDTO bankAccountDTO){
+      return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId,page,size ),bankAccountDTO);
 
     }
 }

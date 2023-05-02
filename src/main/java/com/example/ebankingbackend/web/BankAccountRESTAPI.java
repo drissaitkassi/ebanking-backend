@@ -29,10 +29,11 @@ public class BankAccountRESTAPI {
     }
 
     @GetMapping(path = "/api/v1/bank/operations/{accountId}")
-    public AccountHistoryDTO getAccountOperationsHistory(@PathVariable(name = "accountId") String accId) throws BankAccountNotFound {
+    public AccountHistoryDTO getAccountOperationsHistory(@PathVariable(name = "accountId") String accId, @RequestParam(name = "page") int page,@RequestParam(name ="size") int size) throws BankAccountNotFound {
         BankAccountDTO bk= bankAccountService.getBankAccount(accId);
-        return bankAccountService.getAccountHistory(accId,bk);
+        return bankAccountService.getAccountHistory(accId,page,size,bk);
     }
+
 
     @PostMapping(path ="/api/v1/bank/accounts/saving" )
     public SavingAcountDTO saveSavingAccount(@RequestBody SavingAcountDTO savingAcountDTO) throws CustomerNotFoundExeption {

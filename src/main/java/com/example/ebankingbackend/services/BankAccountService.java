@@ -42,7 +42,13 @@ public interface BankAccountService {
     List<BankAccountDTO> getBankAccounts();
 
 
-    List<AccountOperationDTO> getAccountOperationsHistory(String accountId);
+    //List<AccountOperationDTO> getAccountOperationsHistory(String accountId);
+
+   // List<AccountOperationDTO> getAccountOperationsHistory(String accountId, int page, int size);
+
+    List<AccountOperationDTO> getAccountOperationsHistory(String accountId, int page, int size);
 
     AccountHistoryDTO getAccountHistory(String accountId, BankAccountDTO bankAccountDTO);
+
+    AccountHistoryDTO getAccountHistory(String accountId, int page, int size, BankAccountDTO bankAccountDTO);
 }

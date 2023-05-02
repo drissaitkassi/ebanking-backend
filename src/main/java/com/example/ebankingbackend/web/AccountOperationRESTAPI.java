@@ -28,14 +28,6 @@ public class AccountOperationRESTAPI {
 
     @PostMapping(path = "/api/v1/operations/debit")
     public void setDebit(@RequestBody DebitOperationDTO debitOperationDTO) throws InsuffitientBalanceExeption, BankAccountNotFound {
-
-        System.out.println("===============================");
-        System.out.println(debitOperationDTO.getDescription());
-        System.out.println("===============================");
-        System.out.println(debitOperationDTO.getAmount());
-        System.out.println("===============================");
-        System.out.println( debitOperationDTO.getAccountId());
-        System.out.println("===============================");
         bankAccountService.debit(debitOperationDTO.getAmount(), debitOperationDTO.getAccountId(), debitOperationDTO.getDescription());
     }
 
