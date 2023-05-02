@@ -150,23 +150,24 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public void debit(double amount, String accountID, String description) throws BankAccountNotFound, InsuffitientBalanceExeption {
-        //BankAccountDTO bankAccount = getBankAccount(accountID);
+        //BankAccountDTO bankAccountDTO = getBankAccount(accountID);
         BankAccount bankAccount= bankAcountRepository.findById(accountID).orElseThrow(()->new BankAccountNotFound("Bank Account not found"));
         if(amount >bankAccount.getBalance())throw new InsuffitientBalanceExeption("Inssuffitient Funds you Asshole") ;
-        AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
+        //AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
+        AccountOperation accountOperation=new AccountOperation();
 
-        //accountOperationDTO.setBankAccountDTO(bankAccount);
-        accountOperationDTO.setAccountId(accountID);
-        accountOperationDTO.setOperationDate(new Date());
-        accountOperationDTO.setOperationType(OperationType.DEBIT);
-        accountOperationDTO.setAmount(amount);
-        accountOperationDTO.setDescription("retrait");
+        accountOperation.setBankAccount(bankAccount);
+        //accountOperation.setAccountId(accountID);
+        accountOperation.setOperationDate(new Date());
+        accountOperation.setOperationType(OperationType.DEBIT);
+        accountOperation.setAmount(amount);
+        accountOperation.setDescription(description);
         bankAccount.setBalance(bankAccount.getBalance()-amount);
        //map to AccountOperation to save on repository
-        AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
-        accountOperationRepository.save(accountOperationToBeSaved);
+        //AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
+        accountOperationRepository.save(accountOperation);
         //map to bank account to save on repository
-       // BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
+       //BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
         bankAcountRepository.save(bankAccount);
 
 
