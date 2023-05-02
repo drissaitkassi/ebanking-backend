@@ -22,7 +22,6 @@ public class BankAccount {
     private double balance;
     private Date createdAt;
     private AccountStatus accountStatus;
-
     @ManyToOne
     private Customer customer;
     @OneToMany(mappedBy = "bankAccount")

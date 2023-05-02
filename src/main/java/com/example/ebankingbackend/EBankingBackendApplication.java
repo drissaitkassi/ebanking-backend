@@ -30,9 +30,9 @@ public class EBankingBackendApplication {
         SpringApplication.run(EBankingBackendApplication.class, args);
 
 
-    }
+    }}
     //@Bean
-    CommandLineRunner commandLineRunner(BankAccountService bankAccountService , BankAcountRepository bankAcountRepository){
+   /* CommandLineRunner commandLineRunner(BankAccountService bankAccountService , BankAcountRepository bankAcountRepository){
         return args -> {
             //create Customers
 
@@ -135,3 +135,4 @@ public class EBankingBackendApplication {
         };
     }
 }
+*/

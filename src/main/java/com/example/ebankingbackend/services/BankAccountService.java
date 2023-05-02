@@ -1,6 +1,7 @@
 package com.example.ebankingbackend.services;
 
 import com.example.ebankingbackend.dtos.*;
+import com.example.ebankingbackend.entities.BankAccount;
 import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.CustomerNotFoundExeption;
 import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
@@ -29,7 +30,11 @@ public interface BankAccountService {
 
     // Account Operation
 
-    void debit(double amount,String accountID,String description) throws BankAccountNotFound, InsuffitientBalanceExeption;
+    BankAccount getRawBankAccount(String accountID) throws BankAccountNotFound;
+
+    void debit(double amount, String accountID, String description) throws BankAccountNotFound, InsuffitientBalanceExeption;
+
+
     void credit(double amount,String accountID,String description) throws BankAccountNotFound;
     void transfert(double amount,String accountSourceID,String accountDestinationId) throws InsuffitientBalanceExeption, BankAccountNotFound;
 

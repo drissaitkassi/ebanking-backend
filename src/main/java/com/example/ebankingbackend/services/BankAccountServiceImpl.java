@@ -137,16 +137,26 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     }
 
+    @Override
+    public BankAccount getRawBankAccount(String accountID) throws BankAccountNotFound{
+        BankAccount bankAccount= bankAcountRepository.findById(accountID).orElse(null);
+        if (bankAccount==null)throw new BankAccountNotFound("BankAccount Not Found");
+        return bankAccount;
+
+
+    }
+
     // AccountOperations
 
     @Override
     public void debit(double amount, String accountID, String description) throws BankAccountNotFound, InsuffitientBalanceExeption {
-        BankAccountDTO bankAccount = getBankAccount(accountID);
-
+        //BankAccountDTO bankAccount = getBankAccount(accountID);
+        BankAccount bankAccount= bankAcountRepository.findById(accountID).orElseThrow(()->new BankAccountNotFound("Bank Account not found"));
         if(amount >bankAccount.getBalance())throw new InsuffitientBalanceExeption("Inssuffitient Funds you Asshole") ;
         AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
 
         //accountOperationDTO.setBankAccountDTO(bankAccount);
+        accountOperationDTO.setAccountId(accountID);
         accountOperationDTO.setOperationDate(new Date());
         accountOperationDTO.setOperationType(OperationType.DEBIT);
         accountOperationDTO.setAmount(amount);
@@ -156,8 +166,8 @@ public class BankAccountServiceImpl implements BankAccountService{
         AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
         accountOperationRepository.save(accountOperationToBeSaved);
         //map to bank account to save on repository
-        BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
-        bankAcountRepository.save(bankAccountToBeSaved);
+       // BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
+        bankAcountRepository.save(bankAccount);
 
 
 
@@ -165,25 +175,25 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public void credit(double amount, String accountID, String description) throws BankAccountNotFound {
-        BankAccountDTO bankAccount = getBankAccount(accountID);
-
-        AccountOperationDTO accountOperationDTO=new AccountOperationDTO();
+    public void credit(double amount, String accountId, String description) throws BankAccountNotFound {
+        BankAccount bankAccount = getRawBankAccount(accountId);
+        AccountOperation accountOperation=new AccountOperation();
 
         //accountOperationDTO.setBankAccountDTO(bankAccount);
-        accountOperationDTO.setOperationDate(new Date());
-        accountOperationDTO.setOperationType(OperationType.CREDIT);
-        accountOperationDTO.setAmount(amount);
-        accountOperationDTO.setDescription("versement");
+        accountOperation.setOperationDate(new Date());
+        accountOperation.setOperationType(OperationType.CREDIT);
+        accountOperation.setAmount(amount);
+        accountOperation.setDescription(description);
+        accountOperation.setBankAccount(bankAccount);
         bankAccount.setBalance(bankAccount.getBalance()+amount);
         //map to AccountOperation to save on repository
-        AccountOperation accountOperationToBeSaved = bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
+        //AccountOperation accountOperationToBeSaved = bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
         //save the operation
-        accountOperationRepository.save(accountOperationToBeSaved);
+        accountOperationRepository.save(accountOperation);
         ///map to bank account to save on repository
-        BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
+       // BankAccount bankAccountToBeSaved = bankServiceMapper.fromBankAccountDTO(bankAccount);
         //save the bank account to reflect the changes on the database
-        bankAcountRepository.save(bankAccountToBeSaved);
+        bankAcountRepository.save(bankAccount);
 
     }
 
@@ -197,7 +207,6 @@ public class BankAccountServiceImpl implements BankAccountService{
         //map to AccountOperation to save on repository
         AccountOperation accountOperationToBeSaved=bankServiceMapper.fromAccountOperationDTO(accountOperationDTO);
         accountOperationRepository.save(accountOperationToBeSaved);
-
 
     }
 
@@ -228,8 +237,7 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public AccountHistoryDTO getAccountHistory(String accountId,BankAccountDTO bankAccountDTO){
-
+    public AccountHistoryDTO getAccountHistory(String accountId, BankAccountDTO bankAccountDTO){
       return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId),bankAccountDTO);
 
     }
