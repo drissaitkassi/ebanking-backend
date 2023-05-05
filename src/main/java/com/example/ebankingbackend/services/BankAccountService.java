@@ -18,8 +18,11 @@ public interface BankAccountService {
     void deleteCustomer(Long customerId);
 
     List<CustomerDTO> listCustomer();
+    List<CustomerDTO> listCustomer(String keyword);
     CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundExeption;
     // Bank accounts
+
+
 
     CurrentAcountDTO saveCurrentBankAccount(double initialBalance, double overDraft, Long customerId) throws CustomerNotFoundExeption;
 

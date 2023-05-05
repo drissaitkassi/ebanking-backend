@@ -65,11 +65,19 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
+    public List<CustomerDTO> listCustomer(String keyword) {
+        List<Customer> customerList= customerRepository.findCustomerByNameContaining(keyword);
+        return customerList.stream().map(customer -> bankServiceMapper.fromCustomer(customer)).toList();
+
+    }
+
+    @Override
     public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundExeption {
 
         Customer customer = customerRepository.findById(customerId).orElseThrow(()->new CustomerNotFoundExeption("customer not found"));
         return bankServiceMapper.fromCustomer(customer);
     }
+
 
 
     // BankAccount

@@ -10,13 +10,20 @@ import java.util.List;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class CustomersRESTAPI {
-
     BankAccountService bankAccountService;
 
     @GetMapping(path = "/customers")
     public List<CustomerDTO> customers(){
         return bankAccountService.listCustomer();
+    }
+
+
+    @GetMapping(path = "/customers/search/{kw}")
+    public List<CustomerDTO> customers(@PathVariable(name = "kw")String keyword){
+        System.out.println(keyword);
+        return bankAccountService.listCustomer(keyword);
     }
 
     @GetMapping(path = "/customers/{id}")
