@@ -12,6 +12,7 @@ public class AccountHistoryDTO {
     private double balance;
     private String accountType;
     private int currentPage;
+    private int totalPgaes;
     private int size;
     List<AccountOperationDTO> accountOperationDTOList;
 

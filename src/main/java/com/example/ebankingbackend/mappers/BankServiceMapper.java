@@ -5,7 +5,6 @@ import com.example.ebankingbackend.entities.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -105,7 +104,7 @@ public class BankServiceMapper {
 
     }
 
-    public AccountHistoryDTO fromAccountHistoryOperations(List<AccountOperationDTO> accountOperationDTO,BankAccountDTO bankAccountDTO ,int page,int size){
+    public AccountHistoryDTO fromAccountHistoryOperations(List<AccountOperationDTO> accountOperationDTO,BankAccountDTO bankAccountDTO ,int page,int size,int totalP){
 
 
         AccountHistoryDTO accountHistoryDTO=new AccountHistoryDTO();
@@ -114,6 +113,7 @@ public class BankServiceMapper {
         accountHistoryDTO.setBalance(bankAccountDTO.getBalance());
         accountHistoryDTO.setAccountOperationDTOList(accountOperationDTO);
         accountHistoryDTO.setCurrentPage(page);
+        accountHistoryDTO.setTotalPgaes(totalP);
         accountHistoryDTO.setSize(size);
 
         return accountHistoryDTO;

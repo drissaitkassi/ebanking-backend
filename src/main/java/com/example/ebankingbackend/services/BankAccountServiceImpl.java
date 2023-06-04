@@ -237,9 +237,9 @@ public class BankAccountServiceImpl implements BankAccountService{
     }
 
     @Override
-    public List<AccountOperationDTO> getAccountOperationsHistory(String accountId, int page, int size){
+    public List<AccountOperationDTO> getAccountOperationsHistory(String accountId, int page, int size ){
         // get operations based on account id
-        Page<AccountOperation> accountOperation=accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page,size));
+        Page<AccountOperation> accountOperation=accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page,size) );
         //map operation to dto
         List<AccountOperationDTO> accountOperationDTOS = accountOperation.stream().map(ops -> bankServiceMapper.fromAccountOperation(ops)).toList();
         //return results
@@ -254,7 +254,9 @@ public class BankAccountServiceImpl implements BankAccountService{
 
     @Override
     public AccountHistoryDTO getAccountHistory(String accountId, int page, int size, BankAccountDTO bankAccountDTO){
-      return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId,page,size ),bankAccountDTO,page,size);
+        Page<AccountOperation> accountOperation=accountOperationRepository.findByBankAccountId(accountId, PageRequest.of(page,size) );
+        int tPages=accountOperation.getTotalPages();
+        return  bankServiceMapper.fromAccountHistoryOperations(getAccountOperationsHistory(accountId,page,size),bankAccountDTO,page,size,tPages);
 
     }
 }

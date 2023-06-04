@@ -10,12 +10,14 @@ import com.example.ebankingbackend.exceptions.BankAccountNotFound;
 import com.example.ebankingbackend.exceptions.InsuffitientBalanceExeption;
 import com.example.ebankingbackend.services.BankAccountService;
 import lombok.AllArgsConstructor;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @AllArgsConstructor
+@CrossOrigin("*")
 public class AccountOperationRESTAPI {
 
     private BankAccountService bankAccountService;
